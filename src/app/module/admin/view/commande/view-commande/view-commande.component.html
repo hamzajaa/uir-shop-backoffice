@@ -1,0 +1,107 @@
+<p-dialog [(visible)]="viewDialog" [style]="{width: '70vw'}" header="Book" [modal]="true"
+          styleClass="p-fluid" [maximizable]="true" [draggable]="false" [resizable]="false">
+    <ng-template pTemplate="content">
+        <p-tabView>
+            <p-tabPanel header="Commande">
+                <div class="grid">
+
+                    <div class="field col-12 md:col-6">
+                        <label for="1">Reference</label>
+                        <input class="mb-2 mr-2" type="text" pInputText placeholder="reference"
+                               id="1" [(ngModel)]="commande.reference"
+                               [disabled]="true"
+                        />
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="6">Date Commande</label>
+                        <input id="6" pInputTextarea rows="5" cols="30"
+                                  placeholder="dateCommande" [(ngModel)]="commande.dateCommande"
+                                  [disabled]="true"
+                        />
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="7">Total Paye</label>
+                        <p-inputNumber class="mb-2 mr-2" id="7" placeholder="totalPaye"
+                                       [(ngModel)]="commande.totalPaye"
+                                       [disabled]="true"
+                        ></p-inputNumber>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="6">Client</label>
+                        <input id="6" pInputTextarea rows="5" cols="30"
+                                  placeholder="client"
+                                  [(ngModel)]="convertFromStringToObject(commande.client).fullName"
+                                  [disabled]="true"
+                        />
+                    </div>
+
+
+                    <div class="field col-12 md:col-6">
+                        <label for="6">Method De Paiement</label>
+                        <input id="6" pInputTextarea rows="5" cols="30"
+                                  placeholder="methodDePaiement"
+                                  [(ngModel)]="commande.methodDePaiement"
+                                  [disabled]="true"
+                        />
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="6">Etat Livraison</label>
+                        <input id="6" pInputTextarea rows="5" cols="30"
+                                  placeholder="etatLivraison"
+                                  [(ngModel)]="commande.etatLivraison"
+                                  [disabled]="true"
+                        />
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="6">Etat Paiement</label>
+                        <input id="6" pInputTextarea rows="5" cols="30"
+                                  placeholder="etatPaiement"
+                                  [(ngModel)]="commande.etatPaiement"
+                                  [disabled]="true"
+                        />
+                    </div>
+
+
+                </div>
+            </p-tabPanel>
+
+            <p-tabPanel header="produits">
+                <div class="grid">
+                    <div class="col">
+                        <div class="card">
+                            <p-table [value]="commandeItems" [scrollable]="true" scrollHeight="200px">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>Nom Produit</th>
+                                        <th>Ref Produit</th>
+                                        <th>Quantite</th>
+                                        <th>Prix</th>
+                                        <th>Categorie</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-cis>
+                                    <tr>
+                                        <td>{{convertFromStringToObject(cis.produit).libelle}}</td>
+                                        <td>{{convertFromStringToObject(cis.produit).reference}}</td>
+                                        <td>{{cis.quantity}}</td>
+                                        <td>{{cis.prix}}</td>
+                                        <td>{{convertFromStringToObject(cis.produit).categorieProduitDto.libele}}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+
+
+        </p-tabView>
+
+    </ng-template>
+
+</p-dialog>

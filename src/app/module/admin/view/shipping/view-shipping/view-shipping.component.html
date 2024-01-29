@@ -1,0 +1,59 @@
+<p-dialog [(visible)]="viewDialog" [style]="{width: '70vw'}" header="Category" [modal]="true"
+          styleClass="p-fluid" [maximizable]="true" [draggable]="false" [resizable]="false">
+    <ng-template pTemplate="content">
+        <p-tabView>
+            <p-tabPanel header="Category">
+                <div class="grid">
+
+                    <div class="field col-11 md:col-5">
+                        <label for="2">Livreur</label>
+                        <p-dropdown appendTo="body" [(ngModel)]="orderShipping.deliveryPerson" id="2"
+                                    [filter]="true" filterMatchMode="contains"
+                                    [showClear]="true" optionLabel="fullname"
+                                    placeholder="DeliveryPerson" [disabled]="true">
+                        </p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="7">Total Paye</label>
+                        <p-inputNumber class="mb-2 mr-2" id="7" placeholder="totalPaye"
+                                       [(ngModel)]="orderShipping.totalPaye"
+                                       [disabled]="true">
+                        </p-inputNumber>
+
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="6">Method De Paiement</label>
+                        <input id="6" pInputTextarea rows="5" cols="30"
+                               placeholder="methodDePaiement" [(ngModel)]="orderShipping.methodDePaiement"
+                               [disabled]="true"/>
+
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="6">Etat Paiement</label>
+                        <input id="6" pInputTextarea rows="5" cols="30"
+                               placeholder="etatPaiement" [(ngModel)]="orderShipping.etatPaiement"
+                               [disabled]="true"/>
+
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="6">Status Livraison</label>
+                        <input id="6" pInputTextarea rows="5" cols="30"
+                               placeholder="status" [(ngModel)]="orderShipping.status"
+                               [disabled]="true"/>
+                    </div>
+
+
+                </div>
+            </p-tabPanel>
+
+        </p-tabView>
+
+    </ng-template>
+
+
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+</p-dialog>

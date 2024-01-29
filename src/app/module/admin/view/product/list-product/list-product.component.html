@@ -1,0 +1,194 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <div class="card">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2 mb-2"
+                            (click)="openNew()"></button>
+                    <button pButton pRipple label="Search"
+                            icon="pi pi-{{findByCriteriaShow?'angle-down':'angle-right'}}"
+                            class="p-button-warning mr-2 mb-2"
+                            (click)="this.findByCriteriaShow = !this.findByCriteriaShow"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-danger mr-2 mb-2"
+                            (click)="deleteSelectedProduits()"
+                            [disabled]="!selectedProduits || !selectedProduits.length"></button>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import"
+                                  chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
+                    <p-splitButton label="Exporter" icon="pi pi-download" styleClass="p-button-help"
+                                   [model]="excelPdfButons"></p-splitButton>
+                </ng-template>
+            </p-toolbar>
+
+            <p-toolbar *ngIf="findByCriteriaShow">
+
+                <div class="col-12">
+                    <div class="flex flex-wrap p-fluid col-12">
+
+                        <div class="lg:col-3 md:col-6 sm:col-12 mb-4">
+                            <label class="font-bold block mb-2"
+                                   for="1">Nom Produit</label>
+                            <input class="w-full" pInputText id="1" type="text" [(ngModel)]="searchProduit.name">
+                        </div>
+
+                        <div class="lg:col-3 md:col-6 sm:col-12 mb-4">
+                            <label class="font-bold block mb-2"
+                                   for="1">Reference</label>
+                            <input class="w-full" pInputText id="1" type="text" [(ngModel)]="searchProduit.reference">
+                        </div>
+
+                        <div class="lg:col-3 md:col-6 sm:col-12 mb-4">
+                            <label class="font-bold block mb-2" for="3">Prix Produit</label>
+                            <p-inputNumber mode="decimal" pInputText id="3"
+                                           [(ngModel)]="searchProduit.prixProduct"></p-inputNumber>
+                        </div>
+
+                        <div class="lg:col-3 md:col-6 sm:col-12 mb-4">
+                            <label class="font-bold block mb-2" for="4">Category</label>
+                            <p-dropdown [options]="categories" [(ngModel)]="searchProduit.category" id="4"
+                                        [filter]="true"
+                                        class="p-fluid" optionLabel="nomCategory"
+                                        [showClear]="true" placeholder="Category"
+                            >
+                            </p-dropdown>
+                        </div>
+
+                        <div class="lg:col-3 md:col-6 sm:col-12 mb-4">
+                            <label class="font-bold block mb-2" for="4">Supplier</label>
+                            <p-dropdown [options]="suppliers" [(ngModel)]="searchProduit.supplier" id="4"
+                                        [filter]="true"
+                                        class="p-fluid" optionLabel="nomSupplier"
+                                        [showClear]="true" placeholder="Supplier"
+                            >
+                            </p-dropdown>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </p-toolbar>
+
+            <p-table
+                #dt
+                [value]="produits"
+                [rows]="10"
+                [paginator]="true"
+                [globalFilterFields]="['reference', 'nomProduct', 'description','prixProduct','category.nomCategory','supplier.nomSupplier']"
+                [tableStyle]="{ 'min-width': '75rem' }"
+                [(selection)]="selectedProduits"
+                [rowHover]="true"
+                dataKey="id"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [showCurrentPageReport]="true"
+            >
+                <ng-template pTemplate="caption">
+                    <div class="flex align-items-center justify-content-between">
+                        <h5 class="m-0">Manage Produits</h5>
+                        <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                           placeholder="Search..."/>
+                </span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 4rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+
+                        <th pSortableColumn="reference" style="min-width:15rem">reference
+                            <p-sortIcon field="reference"></p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="nomProduct">Nom Produit
+                            <p-sortIcon field="nomProduct "></p-sortIcon>
+                        </th>
+
+                        <th>Image</th>
+
+                        <th pSortableColumn="description">description
+                            <p-sortIcon field="description"></p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="prixProduct" style="min-width:10rem">Prix Produit
+                            <p-sortIcon field="prixProduct"></p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="category" style="min-width:10rem">Categorie
+                            <p-sortIcon field="category"></p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="supplier" style="min-width:10rem">Supplier
+                            <p-sortIcon field="supplier"></p-sortIcon>
+                        </th>
+
+                        <th>Actions</th>
+
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-produit>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="produit"></p-tableCheckbox>
+                        </td>
+
+                        <td>{{ produit.reference }}</td>
+
+                        <td>{{ produit.nomProduct == null || produit.nomProduct === undefined ? produit.name : produit.nomProduct }}</td>
+
+                        <td>
+                            <img [src]="produit.imgs === null || produit.imgs.length == 0    ? '../../../../../../assets/defaultproductimage.jpg' : produit.imgs[0]"
+                                 [alt]="produit.name" width="50" class="shadow-4"
+                                 (click)="showImageDialog(produit.imgs[0])"/>
+                        </td>
+                        <td>{{ produit.description }}</td>
+
+                        <td>{{produit.prixProduct}}</td>
+
+                        <td>{{ produit.category == null || produit.category.nomCategory == undefined || produit.category.nomCategory == null ? 'not found' : produit.category.nomCategory    }}</td>
+
+                        <td>{{ produit.supplier == null  || produit.supplier.nomSupplier == undefined || produit.supplier.nomSupplier == null ? 'not found' : produit.supplier.nomSupplier  }}</td>
+
+                        <td>
+                            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                                    (click)="editProduit(produit)"></button>
+                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger mr-2"
+                                    (click)="deleteProduit(produit)"></button>
+
+                            <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-warning"
+                                    (click)="viewProduit(produit)"></button>
+                        </td>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="flex align-items-center justify-content-between">In total there
+                        are {{ produits ? produits.length : 0 }} produits.
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog header="Image Preview" [(visible)]="showDialog" [modal]="true" [responsive]="true"
+                  [style]="{width: '50vw'}">
+            <img *ngIf="selectedImage" [src]="selectedImage" [alt]="selectedImage" style="width: 100%"/>
+            <p-footer>
+                <button pButton type="button" label="Close" (click)="closeImageDialog()"
+                        class="p-button-secondary"></button>
+            </p-footer>
+        </p-dialog>
+
+        <app-create-product *ngIf="createDialog"></app-create-product>
+        <app-edit-product *ngIf="editDialog"></app-edit-product>
+        <app-view-product *ngIf="viewDialog"></app-view-product>
+        <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+
+    </div>
+</div>

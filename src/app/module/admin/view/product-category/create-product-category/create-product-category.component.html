@@ -1,0 +1,37 @@
+<p-dialog [(visible)]="createDialog" [style]="{width: '70vw'}" header="Category" [modal]="true"
+          styleClass="p-fluid" [maximizable]="true" [draggable]="false" [resizable]="false">
+    <ng-template pTemplate="content">
+        <p-tabView>
+            <p-tabPanel header="Category">
+                <div class="grid">
+
+                    <div class="field col-12 md:col-6">
+                        <label for="1">Nom Categorie<span style="color: red;">*</span></label>
+                        <input class="mb-2 mr-2" type="text" pInputText placeholder="Nom Categorie"
+                               id="1" [(ngModel)]="selectedCategory.nomCategory"
+                               [ngClass]="{'ng-invalid ng-dirty' : !validCategoryNomCategory}"/>
+                        <small class='p-error' *ngIf='!validCategoryNomCategory'>Nom Categorie is Obligation.</small>
+                    </div>
+
+                </div>
+            </p-tabPanel>
+
+        </p-tabView>
+
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <div class="grid-step">
+            <div style="margin-left: auto;">
+                <button pButton pRipple label="Save" icon="pi pi-check" style="margin:10px"
+                        (click)="save()"></button>
+
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-outlined" style="margin:10px"
+                        (click)="hideCreateDialog()"></button>
+            </div>
+
+        </div>
+    </ng-template>
+
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+</p-dialog>

@@ -1,0 +1,97 @@
+<p-dialog [(visible)]="editDialog" [style]="{width: '70vw'}" header="Category" [modal]="true"
+          styleClass="p-fluid" [maximizable]="true" [draggable]="false" [resizable]="false">
+    <ng-template pTemplate="content">
+        <p-tabView>
+            <p-tabPanel header="Category">
+                <div class="grid">
+
+
+                    <div class="field col-11 md:col-5">
+                        <label for="2">Livreur<span style="color: red;">*</span></label>
+                        <p-dropdown appendTo="body" [options]="deliveryPersons"
+                                    [(ngModel)]="orderShipping.deliveryPerson" id="2"
+                                    [filter]="true" filterMatchMode="contains"
+                                    [showClear]="true" optionLabel="fullname"
+                                    placeholder="DeliveryPerson">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-11 md:col-5">
+                        <label></label>
+                        <button pButton pRipple type="button" icon="pi pi-plus"
+                                (click)="openDeliveryPerson('DeliveryPerson')"
+                                class="p-button-success one-colonne-btn-success-align"></button>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="7">Total Paye<span style="color: red;">*</span></label>
+                        <p-inputNumber class="mb-2 mr-2" id="7" placeholder="totalPaye"
+                                       [(ngModel)]="orderShipping.totalPaye"
+                                       [disabled]="true"
+                                       [ngClass]="{'ng-invalid ng-dirty' : !validOrderShippingTotalPaye}">
+                        </p-inputNumber>
+                        <small class='p-error' *ngIf='!validOrderShippingTotalPaye'>TotalPaye is Obligation.</small>
+
+                    </div>
+
+                    <div class="field col-11 md:col-5">
+                        <label for="2">Method De Paiement<span style="color: red;">*</span></label>
+                        <p-dropdown appendTo="body" [options]="methodDePaiements"
+                                    [(ngModel)]="orderShipping.methodDePaiement" id="2"
+                                    [filter]="true" filterMatchMode="contains"
+                                    [showClear]="true"
+                                    placeholder="methodDePaiement"
+                                    [ngClass]="{'ng-invalid ng-dirty' : !validOrderShippingMethodDePaiement}">
+                            <small class='p-error' *ngIf='!validOrderShippingMethodDePaiement'>methodDePaiement is
+                                Obligation.</small>
+                        </p-dropdown>
+                    </div>
+
+                    <div class="field col-11 md:col-5">
+                        <label for="2">Etat Paiement<span style="color: red;">*</span></label>
+                        <p-dropdown appendTo="body" [options]="etatDePaiements" [(ngModel)]="orderShipping.etatPaiement"
+                                    id="2"
+                                    [filter]="true" filterMatchMode="contains"
+                                    [showClear]="true"
+                                    placeholder="etatPaiement"
+                                    [ngClass]="{'ng-invalid ng-dirty' : !validOrderShippingEtatPaiement}">
+                        </p-dropdown>
+                        <small class='p-error' *ngIf='!validOrderShippingEtatPaiement'>etatPaiement is
+                            Obligation.</small>
+                    </div>
+
+                    <div class="field col-11 md:col-5">
+                        <label for="2">Status Livraison<span style="color: red;">*</span></label>
+                        <p-dropdown appendTo="body" [options]="deliveryStatus" [(ngModel)]="orderShipping.status"
+                                    id="2"
+                                    [filter]="true" filterMatchMode="contains"
+                                    [showClear]="true"
+                                    placeholder="status"
+                                    [ngClass]="{'ng-invalid ng-dirty' : !validOrderShippingStatus}">
+                        </p-dropdown>
+                        <small class='p-error' *ngIf='!validOrderShippingStatus'>status is
+                            Obligation.</small>
+                    </div>
+
+
+                </div>
+            </p-tabPanel>
+
+        </p-tabView>
+
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <div class="grid-step">
+            <div style="margin-left: auto;">
+                <button pButton pRipple label="Save" icon="pi pi-check" style="margin:10px"
+                        (click)="edit()"></button>
+
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-outlined" style="margin:10px"
+                        (click)="hideEditDialog()"></button>
+            </div>
+
+        </div>
+    </ng-template>
+
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+</p-dialog>

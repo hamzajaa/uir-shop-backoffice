@@ -1,0 +1,113 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <div class="card">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4 gap-2">
+                <ng-template pTemplate="left">
+                    <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                            (click)="openNew()"></button>
+                    <button pButton pRipple label="Search"
+                            icon="pi pi-{{findByCriteriaShow?'angle-down':'angle-right'}}"
+                            class="p-button-success mr-2"
+                            (click)="this.findByCriteriaShow = !this.findByCriteriaShow"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedCategories()"
+                            [disabled]="!selectedCategories || !selectedCategories.length"></button>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import"
+                                  chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
+                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-toolbar *ngIf="findByCriteriaShow">
+
+                <div class="col-12">
+                    <div class="flex flex-wrap p-fluid col-12">
+
+                        <div class="lg:col-3 md:col-6 sm:col-12 mb-4">
+                            <label class="font-bold block mb-2"
+                                   for="1">Nom Categorie</label>
+                            <input class="w-full" pInputText id="1" type="text" [(ngModel)]="searchCategory.nomCategory">
+                        </div>
+
+                    </div>
+
+                </div>
+            </p-toolbar>
+
+            <p-table
+                #dt
+                [value]="categories"
+                [rows]="10"
+                [paginator]="true"
+                [globalFilterFields]="['nomCategorie']"
+                [tableStyle]="{ 'min-width': '75rem' }"
+                [(selection)]="selectedCategory"
+                [rowHover]="true"
+                dataKey="id"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [showCurrentPageReport]="true"
+                [rowsPerPageOptions]="[10,25,50]" selectionMode="multiple"
+            >
+                <ng-template pTemplate="caption">
+                    <div class="flex align-items-center justify-content-between">
+                        <h5 class="m-0">Manage Categories</h5>
+                        <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                           placeholder="Search..."/>
+                </span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 4rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+
+                        <th pSortableColumn="1" style="min-width:15rem">Nom Categorie
+                            <p-sortIcon field="1"></p-sortIcon>
+                        </th>
+
+                        <th>Actions</th>
+
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-category>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="category"></p-tableCheckbox>
+                        </td>
+
+                        <td>{{ category.nomCategory }}</td>
+
+                        <td>
+                            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                                    (click)="editCategory(category)"></button>
+                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger mr-2"
+                                    (click)="deleteCategory(category)"></button>
+
+                            <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-warning"
+                                    (click)="viewCategory(category)"></button>
+                        </td>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="flex align-items-center justify-content-between">In total there
+                        are {{ categories ? categories.length : 0 }} categories.
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <app-create-product-category *ngIf="createDialog"></app-create-product-category>
+        <app-edit-product-category *ngIf="editDialog"></app-edit-product-category>
+        <app-view-product-category *ngIf="viewDialog"></app-view-product-category>
+        <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+    </div>
+</div>

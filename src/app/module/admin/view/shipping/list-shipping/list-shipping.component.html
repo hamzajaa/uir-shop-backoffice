@@ -1,0 +1,159 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <div class="card">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2 mb-2"
+                            (click)="openNew()"></button>
+                    <button pButton pRipple label="Search"
+                            icon="pi pi-{{findByCriteriaShow?'angle-down':'angle-right'}}"
+                            class="p-button-warning mr-2 mb-2"
+                            (click)="this.findByCriteriaShow = !this.findByCriteriaShow"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-danger mr-2 mb-2"
+                            (click)="deleteSelectedOrderShippings()"
+                            [disabled]="!selectedOrderShippings || !selectedOrderShippings.length"></button>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import"
+                                  chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
+                    <p-splitButton label="Exporter" icon="pi pi-download" styleClass="p-button-help"
+                                   [model]="excelPdfButons"></p-splitButton>
+                </ng-template>
+            </p-toolbar>
+
+            <p-toolbar *ngIf="findByCriteriaShow">
+
+                <div class="col-12">
+                    <div class="flex flex-wrap p-fluid col-12">
+
+                        <div class="lg:col-3 md:col-6 sm:col-12 mb-4">
+                            <label class="font-bold block mb-2" for="3">Total Paye</label>
+                            <p-inputNumber mode="decimal" pInputText id="3"
+                                           [(ngModel)]="searchOrderShipping.totalPaye"></p-inputNumber>
+                        </div>
+
+                        <div class="lg:col-3 md:col-6 sm:col-12 mb-4">
+                            <label class="font-bold block mb-2" for="4">Category</label>
+                            <p-dropdown [options]="deliveryPersons" [(ngModel)]="searchOrderShipping.deliveryPerson"
+                                        id="4" [filter]="true"
+                                        class="p-fluid" optionLabel="fullname"
+                                        [showClear]="true" placeholder="DeliveryPerson"
+                            >
+                            </p-dropdown>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </p-toolbar>
+
+            <p-table
+                #dt
+                [value]="orderShippings"
+                [rows]="10"
+                [paginator]="true"
+                [globalFilterFields]="['reference', 'client.fullname', 'deliveryPerson.fullname','status','methodDePaiement','etatPaiement']"
+                [tableStyle]="{ 'min-width': '75rem' }"
+                [(selection)]="selectedOrderShippings"
+                [rowHover]="true"
+                dataKey="id"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [showCurrentPageReport]="true"
+            >
+                <ng-template pTemplate="caption">
+                    <div class="flex align-items-center justify-content-between">
+                        <h5 class="m-0">Manage OrderShippingss</h5>
+                        <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                           placeholder="Search..."/>
+                </span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 4rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+
+                        <th pSortableColumn="reference" style="min-width:15rem">Reference
+                            <p-sortIcon field="reference"></p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="client">Client
+                            <p-sortIcon field="client"></p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="deliveryPerson">Livreur
+                            <p-sortIcon field="deliveryPerson"></p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="status" style="min-width:10rem">Status Livraison
+                            <p-sortIcon field="status"></p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="methodDePaiement" style="min-width:10rem">Method Paiement
+                            <p-sortIcon field="methodDePaiement"></p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="etatPaiement" style="min-width:10rem">Etat Paiement
+                            <p-sortIcon field="etatPaiement"></p-sortIcon>
+                        </th>
+
+                        <th>Actions</th>
+
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-orderShipping>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="orderShipping"></p-tableCheckbox>
+                        </td>
+
+                        <td>{{ 'ref' }}</td>
+
+                        <td>{{ convertFromStringToObject(orderShipping.client).fullName }}</td>
+
+                        <td>{{ orderShipping.deliveryPerson == null ? 'Not Yet' : orderShipping.deliveryPerson.fullname }}</td>
+                        <td>
+                            <p-tag [value]="orderShipping.status.toString() == null ? 'Not Yet' : orderShipping.status.toString()"
+                                   [severity]="getSeverity(orderShipping)"></p-tag>
+
+                        </td>
+
+                        <td>{{orderShipping.methodDePaiement}}</td>
+
+                        <td>{{ orderShipping.etatPaiement }}</td>
+
+                        <td>
+                            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                                    (click)="edit(orderShipping)"></button>
+                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger mr-2"
+                                    (click)="delete(orderShipping)"></button>
+
+                            <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-warning"
+                                    (click)="view(orderShipping)"></button>
+                        </td>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="flex align-items-center justify-content-between">In total there
+                        are {{ orderShippings ? orderShippings.length : 0 }} orderShippingss.
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <app-create-shipping *ngIf="createDialog"></app-create-shipping>
+        <app-edit-shipping *ngIf="editDialog"></app-edit-shipping>
+        <app-view-shipping *ngIf="viewDialog"></app-view-shipping>
+        <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+
+    </div>
+</div>

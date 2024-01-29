@@ -1,0 +1,94 @@
+<p-dialog [(visible)]="createDialog" [style]="{width: '70vw'}" header="Produit" [modal]="true"
+          styleClass="p-fluid" [maximizable]="true" [draggable]="false" [resizable]="false">
+    <ng-template pTemplate="content">
+        <p-tabView>
+            <p-tabPanel header="Produit">
+                <div class="grid">
+
+                    <div class="field col-12 md:col-6">
+                        <label for="1">Reference<span style="color: red;">*</span></label>
+                        <input class="mb-2 mr-2" type="text" pInputText placeholder="reference"
+                               id="1" [(ngModel)]="selectedProduit.reference"
+                               [ngClass]="{'ng-invalid ng-dirty' : !validateProduitReference}"/>
+                        <small class='p-error' *ngIf='!validateProduitReference'>Reference is Obligation.</small>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="1">Nom Produit<span style="color: red;">*</span></label>
+                        <input class="mb-2 mr-2" type="text" pInputText placeholder="NomProduit"
+                               id="1" [(ngModel)]="selectedProduit.name"
+                               [ngClass]="{'ng-invalid ng-dirty' : !validateProduitReference}"/>
+                        <small class='p-error' *ngIf='!validateProduitReference'>Reference is Obligation.</small>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="6">Description<span style="color: red;">*</span></label>
+                        <textarea id="6" pInputTextarea rows="5" cols="30"
+                                  placeholder="Description" [(ngModel)]="selectedProduit.description"
+                                  [ngClass]="{'ng-invalid ng-dirty' : !validProduitDescription}">
+                         </textarea>
+                        <small class='p-error' *ngIf='!validProduitDescription'>Description is Obligation.</small>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="7">Prix Produit<span style="color: red;">*</span></label>
+                        <p-inputNumber class="mb-2 mr-2" id="7" placeholder="Prix Produit"
+                                       [(ngModel)]="selectedProduit.prixProduct"
+                                       [ngClass]="{'ng-invalid ng-dirty' : !validProduitPrixProduit}">
+                        </p-inputNumber>
+                        <small class='p-error' *ngIf='!validProduitPrixProduit'>Prix Produit is Obligation.</small>
+
+                    </div>
+
+
+                    <div class="field col-11 md:col-5">
+                        <label for="2">Category<span style="color: red;">*</span></label>
+                        <p-dropdown appendTo="body" [options]="categories" [(ngModel)]="selectedProduit.category" id="2"
+                                    [filter]="true" filterMatchMode="contains"
+                                    [showClear]="true" optionLabel="nomCategory"
+                                    placeholder="Category">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-11 md:col-5">
+                        <label></label>
+                        <button pButton pRipple type="button" icon="pi pi-plus" (click)="openCreateCategory('Category')"
+                                class="p-button-success one-colonne-btn-success-align"></button>
+                    </div>
+
+                    <div class="field col-11 md:col-5">
+                        <label for="2">Supplier<span style="color: red;">*</span></label>
+                        <p-dropdown appendTo="body" [options]="suppliers" [(ngModel)]="selectedProduit.supplier" id="2"
+                                    [filter]="true" filterMatchMode="contains"
+                                    [showClear]="true" optionLabel="nomSupplier"
+                                    placeholder="Supplier">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-11 md:col-5">
+                        <label></label>
+                        <button pButton pRipple type="button" icon="pi pi-plus" (click)="openCreateSupplier('Supplier')"
+                                class="p-button-success one-colonne-btn-success-align"></button>
+                    </div>
+
+                </div>
+            </p-tabPanel>
+
+        </p-tabView>
+
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <div class="grid-step">
+            <div style="margin-left: auto;">
+                <button pButton pRipple label="Save" icon="pi pi-check" style="margin:10px"
+                        (click)="save()"></button>
+
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-outlined" style="margin:10px"
+                        (click)="hideCreateDialog()"></button>
+            </div>
+
+        </div>
+    </ng-template>
+
+    <app-create-product-category></app-create-product-category>
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+</p-dialog>

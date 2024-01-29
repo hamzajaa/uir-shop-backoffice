@@ -1,0 +1,59 @@
+<p-dialog [(visible)]="viewDialog" [style]="{width: '70vw'}" header="Produit" [modal]="true"
+          styleClass="p-fluid" [maximizable]="true" [draggable]="false" [resizable]="false">
+    <ng-template pTemplate="content">
+        <p-tabView>
+            <p-tabPanel header="Produit">
+                <div class="grid">
+
+                    <div class="field col-12 md:col-6">
+                        <label for="1">Reference</label>
+                        <input class="mb-2 mr-2" type="text" pInputText placeholder="Title"
+                               id="1" [(ngModel)]="produit.reference"
+                               [disabled]="true"/>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="1">Nom Produit</label>
+                        <input class="mb-2 mr-2" type="text" pInputText placeholder="Title"
+                               id="1" [(ngModel)]="produit.name"
+                               [disabled]="true" />
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="6">Description</label>
+                        <textarea id="6" pInputTextarea rows="5" cols="30"
+                                  placeholder="Description" [(ngModel)]="produit.description"
+                                  [disabled]="true">
+                         </textarea>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="7">Prix Produit</label>
+                        <p-inputNumber class="mb-2 mr-2" id="7" placeholder="Prix Produit"
+                                       [(ngModel)]="produit.prixProduct"
+                                       [disabled]="true">
+                        </p-inputNumber>
+
+                    </div>
+
+
+                    <div class="field col-11 md:col-5">
+                        <label for="2">Category</label>
+                        <p-dropdown appendTo="body"  [(ngModel)]="produit.category" id="2"
+                                    [filter]="true" filterMatchMode="contains"
+                                    [showClear]="true" optionLabel="nomCategory"
+                                    placeholder="Category" [disabled]="true">
+                        </p-dropdown>
+                    </div>
+
+
+                </div>
+            </p-tabPanel>
+
+        </p-tabView>
+
+    </ng-template>
+
+
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+</p-dialog>

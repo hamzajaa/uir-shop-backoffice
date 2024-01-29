@@ -1,0 +1,68 @@
+<p-dialog [(visible)]="createDialog" [style]="{width: '70vw'}" header="DeliveryPerson" [modal]="true"
+          styleClass="p-fluid" [maximizable]="true" [draggable]="false" [resizable]="false">
+    <ng-template pTemplate="content">
+        <p-tabView>
+            <p-tabPanel header="DeliveryPerson">
+                <div class="grid">
+
+                    <div class="field col-12 md:col-6">
+                        <label for="1">Full Name<span style="color: red;">*</span></label>
+                        <input class="mb-2 mr-2" type="text" pInputText placeholder="FullName"
+                               id="1" [(ngModel)]="selectedDeliveryPerson.fullname"
+                               [ngClass]="{'ng-invalid ng-dirty' : !validDeliveryPersonFullName}"/>
+                        <small class='p-error' *ngIf='!validDeliveryPersonFullName'>FullName is Obligation.</small>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="2">Phone<span style="color: red;">*</span></label>
+                        <input id="2" pInputTextarea rows="5" cols="30"
+                               placeholder="Phone" [(ngModel)]="selectedDeliveryPerson.phone"
+                               [ngClass]="{'ng-invalid ng-dirty' : !validDeliveryPersonPhone}"/>
+                        <small class='p-error' *ngIf='!validDeliveryPersonPhone'>Phone is Obligation.</small>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="3">Email<span style="color: red;">*</span></label>
+                        <input id="3" pInputTextarea rows="5" cols="30"
+                               placeholder="Email" [(ngModel)]="selectedDeliveryPerson.email"
+                               [ngClass]="{'ng-invalid ng-dirty' : !validDeliveryPersonEmail}"/>
+                        <small class='p-error' *ngIf='!validDeliveryPersonEmail'>Email is Obligation.</small>
+                    </div>
+
+                    <div class="field col-11 md:col-5">
+                        <label for="2">Delivery Status<span style="color: red;">*</span></label>
+                        <p-dropdown appendTo="body" [options]="deliveryPersonStatus"
+                                    [(ngModel)]="selectedDeliveryPerson.status" id="2"
+                                    [filter]="true" filterMatchMode="contains"
+                                    [showClear]="true"
+                                    placeholder="DeliveryPerson"
+                                    [ngClass]="{'ng-invalid ng-dirty' : !validDeliveryPersonDeliveryStatus}"
+                        >
+                        </p-dropdown>
+                        <small class='p-error' *ngIf='!validDeliveryPersonDeliveryStatus'>Delivery Status is Obligation.</small>
+                    </div>
+
+
+                </div>
+            </p-tabPanel>
+
+        </p-tabView>
+
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <div class="grid-step">
+            <div style="margin-left: auto;">
+                <button pButton pRipple label="Save" icon="pi pi-check" style="margin:10px"
+                        (click)="save()"></button>
+
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-outlined" style="margin:10px"
+                        (click)="hideCreateDialog()"></button>
+            </div>
+
+        </div>
+    </ng-template>
+
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+
+</p-dialog>
